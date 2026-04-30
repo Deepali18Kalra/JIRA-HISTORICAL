@@ -1,4 +1,3 @@
-
 const statusStyles = {
   // Completed / Success
   "Done": "bg-green-100 text-green-800",
@@ -43,7 +42,7 @@ const statusStyles = {
   // Negative / Cancelled
   "Cancelled": "bg-red-100 text-red-800",
 };
-
+  
 export default function StatusBadge({ status }) {
   const style = statusStyles[status] || "bg-gray-100 text-gray-500"
   return (

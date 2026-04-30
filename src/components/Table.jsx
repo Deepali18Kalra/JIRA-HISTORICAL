@@ -1,5 +1,7 @@
 import { useNavigate } from "react-router-dom"
 import StatusBadge from "./StatusBadge"
+import { UserContext } from "../UserContext"
+import { useContext } from "react"
 
 const priorityColors = {
   Highest: "text-red-600 font-semibold",
@@ -11,7 +13,7 @@ const priorityColors = {
 
 export default function Table({ data }) {
   const navigate = useNavigate()
-
+  const {loading,error} = useContext(UserContext)
   if (data.length === 0) {
     return (
       <div className="text-center py-16 text-gray-400 text-sm">
@@ -20,6 +22,8 @@ export default function Table({ data }) {
     )
   }
 
+  if(loading) return <div className="mt-6 text-gray-500 text-sm">Loading comments...</div>
+  if(error) return <div className="mt-6 text-gray-500 text-sm">Error loading comments: {error}</div>
   return (
     <div className="overflow-x-auto">
       <table className="w-full text-sm border-collapse">
@@ -38,7 +42,9 @@ export default function Table({ data }) {
           {data.map((row, idx) => (
             <tr
               key={idx}
-              onClick={() => navigate(`/issue/${row.issueKey}`)}
+              onClick={() => navigate(`/issue/${row.issueKey}`,{
+                state: {issueData: row}
+              })}
               className="hover:bg-blue-50 cursor-pointer transition-colors group"
             >
               <td className="px-4 py-3 font-semibold text-[#0747a6] group-hover:underline whitespace-nowrap">
