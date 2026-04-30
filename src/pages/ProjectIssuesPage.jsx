@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useContext, useEffect, useState } from "react"
 import PageLayout from "../components/PageLayout"
 import SearchInput from "../components/SearchInput"
 import Table from "../components/Table"
@@ -7,25 +7,19 @@ import { parseCSV } from "../utils/csvParser"
 import { dataNormalizer } from "../utils/dataNormalizer"
 import Navbar from "../components/Navbar"
 import IssueTypeFilter from "../components/IssueTypeFilter"
+import { userIdMapper } from "../utils/userIdMapper"
 import ProjectFilter from "../components/ProjectFilter"
+import { normalizeRowsWithRepeatedHeaders } from "../utils/normalizeRowsWithRepeatedHeaders"
+import { UserContext } from "../UserContext"
 
 const PAGE_SIZE = 20
 
 export default function ProjectIssuesPage() {
-  const [issues, setIssues] = useState([]);
+  // const [issues, setIssues] = useState([]);
+  const {issues} = useContext(UserContext);
   const [selectedProject, setSelectedProject] = useState("");
   const [selectedIssueType, setSelectedIssueType] = useState("");
   const [page, setPage] = useState(1)
-
-  useEffect(() => {
-    fetch("/Jira-Dump.csv")
-      .then(res => res.text())
-      .then(text => {
-        parseCSV(text, (rows) => {
-          setIssues(dataNormalizer(rows))
-        })
-      })
-  }, [])
 
   const filteredIssues = issues.filter((issue) => {
     const projectMatch =
